@@ -1,5 +1,9 @@
 fastapi
 uvicorn
-openai
-python-multipart
+python-jose
+python-dotenv
+passlib[bcrypt]
+sqlalchemy
+aiofiles
+request
 pillow
