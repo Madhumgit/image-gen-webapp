@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login / Signup</title>
+  <style>
+    body {
+      background: #121212;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 60px;
+    }
+    input, button {
+      padding: 14px;
+      margin: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+    button {
+      background: #ff4081;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to AI Image Generator 🎨</h1>
+  
+  <h3>Signup</h3>
+  <input type="text" id="signup_email" placeholder="Email">
+  <input type="password" id="signup_password" placeholder="Password">
+  <button onclick="signup()">Signup</button>
+
+  <h3>Login</h3>
+  <input type="text" id="login_email" placeholder="Email">
+  <input type="password" id="login_password" placeholder="Password">
+  <button onclick="login()">Login</button>
+
+  <script>
+    if (!localStorage.getItem('token')) {
+  window.location.href = 'login.html';  // assuming your login page is named login.html
+}
+    function signup() {
+      fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('signup_email').value,
+          password: document.getElementById('signup_password').value
+        })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Signup failed"));
+    }
+
+    function login() {
+      fetch('/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          username: document.getElementById('login_email').value,
+          password: document.getElementById('login_password').value
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.access_token) {
+          localStorage.setItem('token', data.access_token);
+          window.location.href = '/image-gen';
+        } else {
+          alert("Login failed");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
